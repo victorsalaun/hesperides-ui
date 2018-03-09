@@ -1,21 +1,44 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {inject, observer} from "mobx-react";
+import {
+    blueGrey900,
+    blueGrey700,
+    blueGrey100
+} from "material-ui/styles/colors";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import {Route, Router} from "react-router-dom";
+import createBrowserHistory from "history/createBrowserHistory";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+import Header from "./components/Header/Header";
+import ModulesList from "./components/Modules/ModulesList";
 
-export default App;
+const muiTheme = getMuiTheme({
+    palette: {
+        primary1Color: blueGrey900,
+        primary2Color: blueGrey700,
+        primary3Color: blueGrey100
+    }
+});
+
+// Create React Router Browser History
+const history = createBrowserHistory();
+
+const App = ({modulesStore}) => (
+    <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+            <Router history={history} basename={"/"}>
+                <div>
+                    <Header/>
+                    <div>
+                        <Route exact path="/"/>
+                        <Route exact path="/modules" component={ModulesList}/>
+                        <Route path="/modules/:id"/>
+                    </div>
+                </div>
+            </Router>
+        </div>
+    </MuiThemeProvider>
+);
+
+export default inject("modulesStore")(observer(App));
