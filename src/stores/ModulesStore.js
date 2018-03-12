@@ -7,8 +7,10 @@ const ModulesStore = types
     .actions(self => ({
         fetchModulesNames: flow(function* load() {
             self.modulesNames = yield fetch(
-                "http://localhost:8081/rest/modules"
-            ).then(data => data.json());
+                "http://localhost:8080/rest/modules"
+            )
+                .then(data => data.json())
+                .then(data => data.sort());
             console.log(self.modulesNames);
         })
     }));
